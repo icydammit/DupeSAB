@@ -3289,8 +3289,8 @@ New("TextLabel", {
 
 -- Discord button
 local discordBtn = New("TextButton", {
-    Size=UDim2.new(0,26,0,22),
-    Position=UDim2.new(1,-32,0.5,-11),
+    Size=UDim2.new(0,58,0,22),
+    Position=UDim2.new(1,-66,0.5,-11),
     BackgroundColor3=Color3.fromRGB(88,101,242),
     BorderSizePixel=0,
     Text="",
@@ -3299,11 +3299,10 @@ local discordBtn = New("TextButton", {
 })
 Corner(discordBtn, 5)
 
--- Discord icon label (huruf "D" sebagai placeholder icon)
 New("TextLabel", {
     Size=UDim2.new(1,0,1,0),
     Position=UDim2.new(0,0,0,0),
-    Text="DC",
+    Text="Discord",
     TextColor3=Color3.fromRGB(255,255,255),
     Font=Enum.Font.GothamBold,
     TextSize=9,
@@ -3319,19 +3318,31 @@ discordBtn.MouseLeave:Connect(function()
     discordBtn.BackgroundColor3 = Color3.fromRGB(88,101,242)
 end)
 
--- Klik buka Discord di browser
+-- Klik buka Discord
 discordBtn.MouseButton1Click:Connect(function()
-    setclipboard("https://discord.gg/YhyStcHhwB")
-    -- Buka browser
-    local HttpService = game:GetService("HttpService")
-    if syn and syn.request then
-        -- Synapse / executor support
+    local url = "https://discord.gg/YhyStcHhwB"
+    local success = false
+
+    -- Delta Executor
+    if not success and typeof(delta_open_url) == "function" then
+        pcall(function() delta_open_url(url) end)
+        success = true
     end
-    -- Gunakan shell/open link via executor
-    if (shellexecute) then
-        shellexecute("https://discord.gg/YhyStcHhwB")
-    elseif (os and os.execute) then
-        os.execute('start https://discord.gg/YhyStcHhwB')
+
+    -- Volt Executor
+    if not success and typeof(volt_open_url) == "function" then
+        pcall(function() volt_open_url(url) end)
+        success = true
+    end
+
+    -- Fallback clipboard + notifikasi
+    if not success then
+        pcall(function() setclipboard(url) end)
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Discord",
+            Text = "LINK COPIED, PASTE IN YOUR BROWSER.",
+            Duration = 4,
+        })
     end
 end)
 
