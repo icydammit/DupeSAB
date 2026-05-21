@@ -3254,6 +3254,7 @@ pcall(function()
 end)
 
 -- ── MAIN WINDOW ──────────────────────────────────────────
+-- ── MAIN WINDOW ──────────────────────────────────────────
 local WIN_W = 400
 local win = New("Frame", {
     Size=UDim2.new(0,WIN_W,0,514),
@@ -3264,6 +3265,7 @@ local win = New("Frame", {
 })
 Corner(win, 8)
 Stroke(win, Color3.fromRGB(50,45,80), 1, 0.2)
+
 -- title bar
 local tbar = New("Frame", {
     Size=UDim2.new(1,0,0,36),
@@ -3271,14 +3273,68 @@ local tbar = New("Frame", {
     BorderSizePixel=0, Parent=win,
 })
 Corner(tbar, 8)
-New("Frame", {Size=UDim2.new(1,0,0.5,0), Position=UDim2.new(0,0,0.5,0), BackgroundColor3=Color3.fromRGB(30,28,42), BorderSizePixel=0, Parent=tbar})
+New("Frame", {
+    Size=UDim2.new(1,0,0.5,0),
+    Position=UDim2.new(0,0,0.5,0),
+    BackgroundColor3=Color3.fromRGB(30,28,42),
+    BorderSizePixel=0, Parent=tbar
+})
 New("TextLabel", {
     Size=UDim2.new(1,-20,1,0), Position=UDim2.new(0,10,0,0),
-    Text="@KingScripts  2026 Visuals",
+    Text="ZynnHub 2026 Visuals",
     TextColor3=Color3.fromRGB(230,230,240), Font=Enum.Font.GothamSemibold,
     TextSize=10, BackgroundTransparency=1,
     TextXAlignment=Enum.TextXAlignment.Left, Parent=tbar,
 })
+
+-- Discord button
+local discordBtn = New("TextButton", {
+    Size=UDim2.new(0,26,0,22),
+    Position=UDim2.new(1,-32,0.5,-11),
+    BackgroundColor3=Color3.fromRGB(88,101,242),
+    BorderSizePixel=0,
+    Text="",
+    AutoButtonColor=false,
+    Parent=tbar,
+})
+Corner(discordBtn, 5)
+
+-- Discord icon label (huruf "D" sebagai placeholder icon)
+New("TextLabel", {
+    Size=UDim2.new(1,0,1,0),
+    Position=UDim2.new(0,0,0,0),
+    Text="DC",
+    TextColor3=Color3.fromRGB(255,255,255),
+    Font=Enum.Font.GothamBold,
+    TextSize=9,
+    BackgroundTransparency=1,
+    Parent=discordBtn,
+})
+
+-- Hover effect
+discordBtn.MouseEnter:Connect(function()
+    discordBtn.BackgroundColor3 = Color3.fromRGB(71,82,196)
+end)
+discordBtn.MouseLeave:Connect(function()
+    discordBtn.BackgroundColor3 = Color3.fromRGB(88,101,242)
+end)
+
+-- Klik buka Discord di browser
+discordBtn.MouseButton1Click:Connect(function()
+    setclipboard("https://discord.gg/YhyStcHhwB")
+    -- Buka browser
+    local HttpService = game:GetService("HttpService")
+    if syn and syn.request then
+        -- Synapse / executor support
+    end
+    -- Gunakan shell/open link via executor
+    if (shellexecute) then
+        shellexecute("https://discord.gg/YhyStcHhwB")
+    elseif (os and os.execute) then
+        os.execute('start https://discord.gg/YhyStcHhwB')
+    end
+end)
+
 MakeDraggable(win, tbar)
 
 -- restore last-known window position (if saved) and persist on every move.
